@@ -20,6 +20,7 @@ S = DOWN
 A = LEFT
 D = RIGHT
 R = RESET
+LSHIFT = DEBUG
 
 Good luck and have fun playing the Hot/Cold Game!
 """
@@ -31,14 +32,13 @@ __github__ = 'https://github.com/joniss01/hot_cold_game'
 
 import pygame
 import random
-import turtle
-from pygame.locals import *
 
-BLACK = (0,0,0)
-RED = (255,0,0)
-GREEN = (0,255,0)
-BLUE = (0,0,255)
-WHITE = (255,255,255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+WHITE = (255, 255, 255)
+YELLOW = (255, 233, 0)
 
 SCREEN_SIZE = 800
 SCREEN = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE))
@@ -63,15 +63,14 @@ circle = pygame.draw.circle(SCREEN, color_circle, (game['user_x'], game['user_y'
 
 # hidden_circle
 hidden_circle = WHITE
-circle = pygame.draw.circle(SCREEN, hidden_circle, (game['user_x'], game['user_y']), 50)
+h_circle = pygame.draw.circle(SCREEN, hidden_circle, (game['hidden_x'], game['hidden_y']), 50)
+
 
 def play_game():
     """
 
     :return:
     """
-    global game
-
     clock = pygame.time.Clock()
 
     run_me = True
@@ -83,26 +82,42 @@ def play_game():
             if event.type == pygame.QUIT:
                 run_me = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    game['user_x'] -= 10
+                if event.key == pygame.K_a:
+                    game['user_x'] -= game['move_size']
 
-                if event.key == pygame.K_RIGHT:
-                    game['user_x'] += 10
+                if event.key == pygame.K_d:
+                    game['user_x'] += game['move_size']
 
-                if event.key == pygame.K_UP:
-                    game['user_y'] -= 10
+                if event.key == pygame.K_w:
+                    game['user_y'] -= game['move_size']
 
-                if event.key == pygame.K_DOWN:
-                    game['user_y'] += 10
+                if event.key == pygame.K_s:
+                    game['user_y'] += game['move_size']
 
-                if game['hidden_color'] == BLACK:
-                    # add debug = d
+                if event.key == pygame.K_LSHIFT:
+                    if game['hidden_color'] == BLACK:
+                        game['hidden_color'] == WHITE
+                    else:
+                        game['hidden_color'] == BLACK
 
+                # if event.key == pygame.K_r:
+                #
 
         SCREEN.fill(BLACK)
         pygame.draw.circle(SCREEN, color_circle, (game['user_x'], game['user_y']), 50)
         pygame.draw.circle(SCREEN, hidden_circle, (game['hidden_x'], game['hidden_y']), 50)
         pygame.display.flip()
+
+    # font = pygame.font.SysFont(None, 24)
+    #
+    # line = font.render('# ' + str(game['num_moves']) + " moves", True, YELLOW)
+    # SCREEN.blit(line, (20, 20))
+    #
+    # debug = font.render('LSHIFT = DEBUG', True, YELLOW)
+    # SCREEN.blit(debug, (20, 15))
+    #
+    # reset = font.render('R = RESET', True, YELLOW)
+    # SCREEN.blit(reset, (20, 10))
 
 
 def hidden_pos():
@@ -110,9 +125,6 @@ def hidden_pos():
 
     :return:
     """
-
-    global game
-
     user_pos = SCREEN_SIZE / 2
 
     inside_dist = game['circle_size']
