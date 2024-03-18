@@ -61,8 +61,9 @@ game = {
 
 def play_game():
     """
-
-    :return:
+    Main function used to play and control the Hot/Cold Game. The circles are drawn and colors are updated.
+    The debug is used to see the hidden circle and the reset button will reset the game and hidden circle location.
+    :return: None
     """
     clock = pygame.time.Clock()
     run_me = True
@@ -116,6 +117,13 @@ def play_game():
 
 
 def render_menu(screen, font):
+    """
+    This sets the small menu in the top left corner of the game window. This menu shows the move counnter, controls for
+    debug, and reset.
+    :param screen: The surface to render the screen on
+    :param font: Font used to create text
+    :return: None
+    """
     moves_text = font.render('Moves: ' + str(game['num_moves']), True, YELLOW)
     debug_text = font.render('LSHIFT = DEBUG', True, YELLOW)
     reset_text = font.render('R = RESET', True, YELLOW)
@@ -127,8 +135,9 @@ def render_menu(screen, font):
 
 def hidden_pos():
     """
-
-    :return:
+    This function is responsible for placing the hidden circle in random locations around the window, but will not
+    allow the circle to be within a certain distance from the user's circle
+    :return: None
     """
     user_pos = SCREEN_SIZE / 2
 
@@ -149,6 +158,15 @@ def hidden_pos():
 
 
 def update_colors():
+    """
+    This function will change the user's circle based on if the movement is closer or further away from the hidden
+    circle.
+    If the user moves closer to the hidden circle, the user's circle will turn red. If the user moves away from the
+    hidden circle, the user's circle will turn blue. When the user finds the hidden circle they will both turn green.
+    :return: None
+    """
+    # I was stuck on this one for a while, so I used the turtle code and ChatGPT to help me get the colors working.
+
     # Get current and previous positions
     curr_x, curr_y = game['user_x'], game['user_y']
     prev_x, prev_y = game['prev_x'], game['prev_y']
@@ -182,10 +200,10 @@ def update_colors():
 
 def set_difficulty(level, difficulty):
     """
-
-    :param level:
-    :param difficulty:
-    :return:
+    Difficulty to set how big the circle is and how far the circle will move per key press.
+    :param level: The level of difficulty the game will be set to
+    :param difficulty: The settings that make up the difficulty of the level
+    :return: None
     """
     if difficulty == 3:
         game['circle_size'], game['move_size'] = (10, 10)
@@ -196,6 +214,10 @@ def set_difficulty(level, difficulty):
 
 
 def play_music():
+    """
+    This will play music as long as the game is open and will infinitely loop until the game is closed.
+    :return: None
+    """
     pygame.mixer.init()
     pygame.mixer.music.load('sneaky-snitch.mp3')
     pygame.mixer.music.set_volume(0.5)
@@ -204,8 +226,9 @@ def play_music():
 
 def main():
     """
-
-    :return:
+    Main function used to play and manage the game. This function initializes the game, displays the main menu, and
+    loops the game until the user quits.
+    :return: None
     """
     play_music()
     pygame.init()
